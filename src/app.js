@@ -1,5 +1,6 @@
 require('dotenv').config()
 const express = require('express')
+const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
 const helmet = require('helmet')
@@ -8,16 +9,31 @@ const { NODE_ENV } = require('./config')
 
 const app = express()
 
+const jsonParser = bodyParser.json()
+const urlencodedParser = bodyParser.urlencoded({extended: false})
+
 const morganOption = ( NODE_ENV === 'production')
     ? 'tiny'
     : 'common' ;
 
 app.use(morgan(morganOption))
+app.use(express.json())
 app.use(helmet())
 app.use(cors())
 
 app.get('/', (req, res) => {
     res.send('Hello, world!')
+})
+
+app.get('/incidentform', (req, res) => {
+    res
+    .send('Get Recieved');
+})
+
+app.post('/incidentform', jsonParser, (req, res) => {
+    console.log(req.body);
+    res
+    .send('Post Recieved');
 })
 
 app.use(function errorHandler(error, req, res, next) {
