@@ -5,6 +5,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
+const IncidentService = require('./incident-service')
 
 
 const app = express()
@@ -25,9 +26,12 @@ app.get('/', (req, res) => {
     res.send('Hello, world!')
 })
 
-app.get('/incidentform', (req, res) => {
-    res
-    .send('Get Recieved');
+app.get('/incidentform', (req, res, next) => {
+    const knexInstance = req.app.get('db')
+    IncidentService.getAllIncidents(knexInstance)
+        .then(incidents => {
+            res.json(incidents)
+        })
 })
 
 app.post('/incidentform', jsonParser, (req, res) => {
