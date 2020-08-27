@@ -1,4 +1,4 @@
-const IncidentService = {
+const InputService = {
     getAllIncidents(knex) {
         return knex.select('*').from('school')
     },
@@ -26,4 +26,4 @@ const IncidentService = {
     },
 }
 
-module.exports = IncidentService
+module.exports = InputService
