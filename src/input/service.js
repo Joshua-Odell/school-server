@@ -11,6 +11,15 @@ const InputService = {
                 return rows[0]
             })
     },
+    addHold(knex, newHold){
+        return knex
+            .insert(newHold)
+            .into('holds')
+            .returning('*')
+            .then(rows => {
+                return rows[0]
+            })
+    },
     getById(knex, id){
         return knex.from('school').select('*').where('id', id).first()
     },

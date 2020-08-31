@@ -3,5 +3,5 @@ CREATE TABLE holds(
     hold_type TEXT NOT NULL,
     start_time TIME NOT NULL,
     stop_time TIME NOT NULL,
-    duration TIME NOT NULL
+    duration TEXT NOT NULL
 );
