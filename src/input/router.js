@@ -11,21 +11,20 @@ const bodyParser = express.json()
 
 inputRouter
     .route('/')
-    // This is a post for the incident-- its inputs are outdated
+    // This is a post for the incident
     .post((req, res, next) => {
         const knexInstance = req.app.get('db')
         const { 
             student_marss, staff_submitter, school, date, day_of_the_week, 
-            start_time, end_time, duration, seclusion, resonable_force, 
-            student_injury, staff_injury, law_enforcement, room_location, 
-            holds_used, antecedent, contributing_variables, people_involved,
-            major_disruption } = req.body;
+            seclusion, resonable_force, student_injury, staff_injury, 
+            law_enforcement, room_location, hold_1, hold_2, hold_3, hold_4, hold_5,
+            antecedent, contributing_variables, people_involved, major_disruption 
+        } = req.body;
         const newIncident = { 
             student_marss, staff_submitter, school, date, day_of_the_week, 
-            start_time, end_time, duration, seclusion, resonable_force, 
-            student_injury, staff_injury, law_enforcement, room_location, 
-            holds_used, antecedent, contributing_variables, people_involved,
-            major_disruption
+            seclusion, resonable_force, student_injury, staff_injury, 
+            law_enforcement, room_location, hold_1, hold_2, hold_3, hold_4, hold_5,
+            antecedent, contributing_variables, people_involved, major_disruption 
          }
 
          //validating the content of the newIncident variables
@@ -41,7 +40,19 @@ inputRouter
              .status(201)
              .json(incident)
          })
-        
+        .catch(next)
+    })
+    
+inputRouter
+    .route('/studentcheck')
+    .get((req, res, next) => {
+        const knexInstance = req.app.get('db')
+        InputService.getByMarssLastName(knexInstance, req.body.marss, req.body.student_last_name)
+            .then(student => {
+                res
+                .status(227)
+                .json('Students Presence Confirmed')
+            })
     })
 
 inputRouter

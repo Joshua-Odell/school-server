@@ -5,7 +5,7 @@ const InputService = {
     addIncident(knex, newIncident){
         return knex
             .insert(newIncident)
-            .into('school')
+            .into('incident')
             .returning('*')
             .then(rows => {
                 return rows[0]
@@ -19,6 +19,13 @@ const InputService = {
             .then(rows => {
                 return rows[0]
             })
+    },
+    getByMarssLastName(knex, marss, student_last_name){
+        return knex
+            .select('*')
+            .from('student')
+            .where('marss', marss) 
+            .where('student_last_name', student_last_name)
     },
     getById(knex, id){
         return knex.from('school').select('*').where('id', id).first()
