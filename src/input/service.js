@@ -20,12 +20,18 @@ const InputService = {
                 return rows[0]
             })
     },
-    getByMarssLastName(knex, marss, student_last_name){
+    getStudentVerification(knex, marss, student_last_name){
         return knex
             .select('*')
             .from('student')
             .where('marss', marss) 
             .where('student_last_name', student_last_name)
+    },
+    getStaffVerification(knex, staff_name){
+        return knex
+            .select('*')
+            .from('staff')
+            .where('staff_name', staff_name)
     },
     getById(knex, id){
         return knex.from('school').select('*').where('id', id).first()

@@ -47,11 +47,23 @@ inputRouter
     .route('/studentcheck')
     .get((req, res, next) => {
         const knexInstance = req.app.get('db')
-        InputService.getByMarssLastName(knexInstance, req.body.marss, req.body.student_last_name)
+        InputService.getStudentVerification(knexInstance, req.body.marss, req.body.student_last_name)
             .then(student => {
                 res
                 .status(227)
                 .json('Students Presence Confirmed')
+            })
+    })
+
+inputRouter
+    .route('/staffcheck')
+    .get((req, res, next) => {
+        const knexInstance = req.app.get('db')
+        InputService.getStaffVerification(knexInstance, req.body.staff_name)
+            .then(staff => {
+                res
+                .status(227)
+                .json(staff)
             })
     })
 
