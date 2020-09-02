@@ -18,7 +18,7 @@ CREATE TABLE incident (
     hold_5 INTEGER REFERENCES holds(id),
     antecedent TEXT NOT NULL,
     contributing_variables TEXT NOT NULL,
-    people_involved TEXT NOT NULL,
+    people_involved TEXT[] NOT NULL,
     major_disruption TEXT NOT NULL,
     approved BOOLEAN DEFAULT false,
     approver INTEGER REFERENCES staff(id) NOT NULL

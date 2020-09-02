@@ -1,5 +1,5 @@
 INSERT INTO staff
-    (staff_name, job_title)
+    (staff_name, job_title, email)
     VALUES
     ('Vito Corleone', 'Shot Caller'),
     ('Michael Corleone', 'Reluctant Villian'),

@@ -44,26 +44,40 @@ inputRouter
     })
     
 inputRouter
-    .route('/studentcheck')
+    .route('/studentcheck/:marss/:student_last_name')
     .get((req, res, next) => {
         const knexInstance = req.app.get('db')
-        InputService.getStudentVerification(knexInstance, req.body.marss, req.body.student_last_name)
+        InputService.getStudentVerification(knexInstance, req.params.marss, req.params.student_last_name)
             .then(student => {
                 res
-                .status(227)
+                .status(200)
                 .json('Students Presence Confirmed')
             })
+            .catch(next)
     })
 
 inputRouter
-    .route('/staffcheck')
+    .route('/involvedstudentcheck/:student_first_name/:student_last_name')
     .get((req, res, next) => {
         const knexInstance = req.app.get('db')
-        InputService.getStaffVerification(knexInstance, req.body.staff_name)
+        InputService.getInvolvedStudentVerification(knexInstance, req.params.student_first_name, req.params.student_last_name)
+        .then(student => {
+            res
+            .status(200)
+            .json('Students Presence Confirmed')
+        })
+        .catch(next)
+    })
+
+inputRouter
+    .route('/staffcheck/:staff_name')
+    .get((req, res, next) => {
+        const knexInstance = req.app.get('db')
+        InputService.getStaffVerification(knexInstance, req.params.staff_name)
             .then(staff => {
                 res
-                .status(227)
-                .json(staff)
+                .status(200)
+                .json(staff[0].email)
             })
     })
 
