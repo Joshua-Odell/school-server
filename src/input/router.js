@@ -14,6 +14,7 @@ inputRouter
     // This is a post for the incident
     .post((req, res, next) => {
         const knexInstance = req.app.get('db')
+        console.log(req.body)
         const { 
             student_marss, staff_submitter, school, date, day_of_the_week, 
             seclusion, resonable_force, student_injury, staff_injury, 
