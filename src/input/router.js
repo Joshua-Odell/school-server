@@ -17,13 +17,13 @@ inputRouter
         console.log(req.body)
         const { 
             student_marss, staff_submitter, school, date, day_of_the_week, 
-            seclusion, resonable_force, student_injury, staff_injury, 
+            seclusion, reasonable_force, student_injury, staff_injury, 
             law_enforcement, room_location, hold_1, hold_2, hold_3, hold_4, hold_5,
             antecedent, contributing_variables, people_involved, major_disruption, approver 
         } = req.body;
         const newIncident = { 
             student_marss, staff_submitter, school, date, day_of_the_week, 
-            seclusion, resonable_force, student_injury, staff_injury, 
+            seclusion, reasonable_force, student_injury, staff_injury, 
             law_enforcement, room_location, hold_1, hold_2, hold_3, hold_4, hold_5,
             antecedent, contributing_variables, people_involved, major_disruption, approver 
          }

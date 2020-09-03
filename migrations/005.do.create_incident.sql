@@ -6,7 +6,7 @@ CREATE TABLE incident (
     date  DATE NOT NULL,
     day_of_the_week TEXT NOT NULL,
     seclusion BOOLEAN NOT NULL,
-    resonable_force BOOLEAN NOT NULL,
+    reasonable_force TEXT NOT NULL,
     student_injury BOOLEAN NOT NULL,
     staff_injury BOOLEAN NOT NULL,
     law_enforcement BOOLEAN NOT NULL,
