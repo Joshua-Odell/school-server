@@ -14,7 +14,6 @@ inputRouter
     // This is a post for the incident
     .post((req, res, next) => {
         const knexInstance = req.app.get('db')
-        console.log(req.body)
         const { 
             student_marss, staff_submitter, school, date, day_of_the_week, 
             seclusion, reasonable_force, student_injury, staff_injury, 
@@ -27,7 +26,6 @@ inputRouter
             law_enforcement, room_location, hold_1, hold_2, hold_3, hold_4, hold_5,
             antecedent, contributing_variables, people_involved, major_disruption, approver 
          }
-         console.log(newIncident);
          //validating the content of the newIncident variables
 
          const id = uuid();

@@ -24,24 +24,6 @@ app.use(helmet())
 app.use(cors())
 app.use(inputRouter)
 
-app.get('/', (req, res) => {
-    res.send('Hello, world!')
-})
-
-app.get('/incidentform', (req, res, next) => {
-    const knexInstance = req.app.get('db')
-    IncidentService.getAllIncidents(knexInstance)
-        .then(incidents => {
-            res.json(incidents)
-        })
-})
-
-app.post('/incidentform', jsonParser, (req, res) => {
-    console.log(req.body);
-    res
-    .send('Post Recieved');
-})
-
 app.use(function errorHandler(error, req, res, next) {
     let response
     if (NODE_ENV === 'production') {
