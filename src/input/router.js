@@ -32,8 +32,18 @@ inputRouter
     .route('/studentcheck/:marss/:student_last_name')
     .get((req, res, next) => {
         const knexInstance = req.app.get('db')
+        if(!req.params.marss || !req.params.student_last_name){
+            return res.status(404);
+        }
         InputService.getStudentVerification(knexInstance, req.params.marss, req.params.student_last_name)
             .then(student => {
+                transporter.sendMail(message, function(error, info){
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log('Email sent:' + info.response);
+                    }
+                })
                 res
                 .status(200)
                 .json('Students Presence Confirmed')
@@ -42,22 +52,12 @@ inputRouter
     })
 
 inputRouter
-    .route('/involvedstudentcheck/:student_first_name/:student_last_name')
-    .get((req, res, next) => {
-        const knexInstance = req.app.get('db')
-        InputService.getInvolvedStudentVerification(knexInstance, req.params.student_first_name, req.params.student_last_name)
-        .then(student => {
-            res
-            .status(200)
-            .json('Students Presence Confirmed')
-        })
-        .catch(next)
-    })
-
-inputRouter
     .route('/staffcheck/:staff_name')
     .get((req, res, next) => {
         const knexInstance = req.app.get('db')
+        if(!req.params.staff_name){
+            return res.status(404);
+        }
         InputService.getStaffVerification(knexInstance, req.params.staff_name)
             .then(staff => {
                 res
@@ -87,31 +87,6 @@ inputRouter
             .json(hold.id)
         })
         .catch(next)
-    })
-    
-
-inputRouter
-    .route('/:id')
-    // This will be the beginging framework for editing a specific entry that failed approval
-    .get((res, req, next) => {
-        const knexInstance = req.app.get('db')
-        InputService.getById(knexInstance, req.params.id)
-            .then(incident => {
-                if(incident.approved){
-                    return res.status(404).json({
-                        error: {message: 'This incident has already been approved'}
-                    })
-                }
-                if(!incident){
-                    return res.status(404).json({
-                        error: {message: 'Incident Not Found'}
-                    })
-                }
-            })
-    })
-    // I need a get that will validate a students name and marrs numbers-- returns only ok if valid
-    .patch((res, req, next) => {
-        // updates anything that is different
     })
 
 module.exports = inputRouter 
