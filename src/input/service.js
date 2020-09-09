@@ -1,7 +1,4 @@
 const InputService = {
-    getAllIncidents(knex) {
-        return knex.select('*').from('school')
-    },
     addIncident(knex, newIncident){
         return knex
             .insert(newIncident)
@@ -27,13 +24,6 @@ const InputService = {
             .where('marss', marss) 
             .where('student_last_name', student_last_name)
     },
-    getInvolvedStudentVerification(knex, student_first_name, student_last_name){
-        return knex
-            .select('*')
-            .from('student')
-            .where('student_first_name', student_first_name) 
-            .where('student_last_name', student_last_name)
-    },
     getStaffVerification(knex, staff_name){
         return knex
             .select('*')
@@ -42,17 +32,6 @@ const InputService = {
     },
     getById(knex, id){
         return knex.from('school').select('*').where('id', id).first()
-    },
-    deleteIncident(knex, id){
-        return knex('school')
-            .where({ id })
-            .delete()
-    },
-    updateIncident(knex, id, updatedIncident){
-        return knex('school')
-            .where({ id })
-            .update(updatedIncident)
-    },
+    }
 }
-
 module.exports = InputService

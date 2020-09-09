@@ -12,12 +12,18 @@ const bodyParser = express.json()
 outputRouter
     .route('/conformationpage/:id')
     .get((res, req, next) => {
+        console.log(req.params)
         const knexInstance = req.app.get('db')
         OutputService.getById(knexInstance, req.params.id)
             .then(incident => {
                 if(!incident){
                     return res.status(404).json({
                         error: {message: 'Incident Not Found'}
+                    })
+                }
+                if(incident.approved){
+                    return res.status(404).json({
+                        error: {message: 'This incident was already approved'}
                     })
                 }else {
                     res

@@ -37,13 +37,6 @@ inputRouter
         }
         InputService.getStudentVerification(knexInstance, req.params.marss, req.params.student_last_name)
             .then(student => {
-                transporter.sendMail(message, function(error, info){
-                    if (error) {
-                        console.log(error);
-                    } else {
-                        console.log('Email sent:' + info.response);
-                    }
-                })
                 res
                 .status(200)
                 .json('Students Presence Confirmed')
