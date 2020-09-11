@@ -30,6 +30,26 @@ outputRouter
                         .json(incident)
                 }
             })
+            .catch(next)
+    })
+    .patch((req, res, next) => {
+        const knexInstance = req.app.get('db')
+        const updatedIncident = { ... req.body }
+        if(!typeof(updatedIncident.approved) || !updatedIncident.approver_comments){
+            return (
+                res
+                .status(404)
+                .json('Invalid Request')
+            )
+        }
+        OutputService.updateIncident(knexInstance, req.params.id, updatedIncident)
+            .then(() => {
+                return (
+                    res.status(200)
+                    .json('incident updated')
+                )
+            })
+            .catch(next)
     })
 
 

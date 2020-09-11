@@ -53,6 +53,12 @@ inputRouter
         }
         InputService.getStaffVerification(knexInstance, req.params.staff_name)
             .then(staff => {
+                console.log(staff)
+                if(!staff[0]){
+                    res
+                    .status(404)
+                    .json('Not a valid Staff member')
+                }
                 res
                 .status(200)
                 .json(staff[0])

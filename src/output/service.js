@@ -6,14 +6,9 @@ const OutputService = {
         .select('incident.approved', 'incident.approver_comments', 'incident.date', 'school.school_name', 'incident.staff_submitter')        
         .where('incident.id', id)
         .first()
-    },    
-    deleteIncident(knex, id){
-        return knex('school')
-            .where({ id })
-            .delete()
     },
     updateIncident(knex, id, updatedIncident){
-        return knex('school')
+        return knex('incident')
             .where({ id })
             .update(updatedIncident)
     },
