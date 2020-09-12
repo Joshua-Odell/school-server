@@ -4,6 +4,8 @@ const { v4: uuid } = require('uuid')
 //const logger = require('../logger')
 const { NODE_ENV } = require('../config')
 const OutputService = require('./service')
+const { updateIncident } = require('./service')
+const returnEmail = require('../email')
 const app = express()
 
 const outputRouter = express.Router()
@@ -41,6 +43,9 @@ outputRouter
                 .status(404)
                 .json('Invalid Request')
             )
+        }
+        if(!updateIncident.approved){
+            returnEmail(req.params.id);
         }
         OutputService.updateIncident(knexInstance, req.params.id, updatedIncident)
             .then(() => {

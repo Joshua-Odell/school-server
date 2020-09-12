@@ -4,10 +4,18 @@ const { v4: uuid } = require('uuid')
 //const logger = require('../logger')
 const { NODE_ENV } = require('../config')
 const InputService = require('./service')
+const pdfDocument = require('pdfkit');
 const app = express()
+const approvalEmail = require('../email')
 
 const inputRouter = express.Router()
 const bodyParser = express.json()
+
+
+
+const fs = require('fs');
+
+
 
 inputRouter
     .route('/')
@@ -23,7 +31,7 @@ inputRouter
         .then(incident => {
             res
             .status(201)
-            .json(incident)
+            .json(incident.id)
         })
         .catch(next)
     })
@@ -53,7 +61,6 @@ inputRouter
         }
         InputService.getStaffVerification(knexInstance, req.params.staff_name)
             .then(staff => {
-                console.log(staff)
                 if(!staff[0]){
                     res
                     .status(404)
@@ -76,16 +83,33 @@ inputRouter
         const newHold = { hold_type, start_time, stop_time, duration }
         const id = uuid();
         
-        InputService.addHold(
-            req.app.get('db'),
-            newHold
-        )
+        InputService.addHold( knexInstance, newHold)
         .then(hold => {
             res
             .status(201)
             .json(hold.id)
         })
         .catch(next)
+    })
+
+inputRouter
+    .route('/pdf/:id')
+    .get((req, res, next) => {
+        const knexInstance = req.app.get('db')
+        InputService.getById( knexInstance, req.params.id)
+        .then(incident => {
+            const doc = new pdfDocument 
+            doc.pipe(fs.createWriteStream('C:/projects/school-server/IRF/IRF' + req.params.id + '.pdf'));
+            doc
+            .fontSize(12)
+            .text(incident.date, 100, 100);
+
+            doc.pipe(res);
+            doc.end();
+            approvalEmail(req.params.id).catch(console.error);  
+        })        
+                
+              
     })
 
 module.exports = inputRouter 

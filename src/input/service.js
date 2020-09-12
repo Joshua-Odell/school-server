@@ -29,9 +29,17 @@ const InputService = {
             .select('*')
             .from('staff')
             .where('staff_name', staff_name)
-    },
+    },    
     getById(knex, id){
-        return knex.from('school').select('*').where('id', id).first()
+        return knex
+        .from('incident')
+        .join('school','incident.school', 'school.id' )
+        .join('student', 'incident.student_marss', 'student.marss')
+        .join('holds', 'incident.hold_1', 'holds.id')
+        .join('staff', 'incident.staff_submitter', 'staff.staff_name')
+        .select('*')        
+        .where('incident.id', id)
+        .first()
     }
 }
 module.exports = InputService
