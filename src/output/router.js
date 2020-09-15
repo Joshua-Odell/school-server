@@ -6,6 +6,7 @@ const { NODE_ENV } = require('../config')
 const OutputService = require('./service')
 const { updateIncident } = require('./service')
 const returnEmail = require('../email')
+const dataReturn = require('../dataReturn');
 const app = express()
 
 const outputRouter = express.Router()
@@ -37,7 +38,7 @@ outputRouter
     .patch((req, res, next) => {
         const knexInstance = req.app.get('db')
         const updatedIncident = { ... req.body }
-        if(!typeof(updatedIncident.approved) || !updatedIncident.approver_comments){
+        if(!typeof(updatedIncident.approved) || (!updatedIncident.approved && !updatedIncident.approver_comments)){
             return (
                 res
                 .status(404)
@@ -45,7 +46,7 @@ outputRouter
             )
         }
         if(!updateIncident.approved){
-            returnEmail(req.params.id);
+            //returnEmail(req.params.id);
         }
         OutputService.updateIncident(knexInstance, req.params.id, updatedIncident)
             .then(() => {
@@ -55,6 +56,11 @@ outputRouter
                 )
             })
             .catch(next)
+        if(updatedIncident.approved){
+            OutputService.getWhole(knexInstance)
+            .then(data => {dataReturn(data);});
+            
+        }
     })
 
 
