@@ -70,6 +70,7 @@ inputRouter
                 .status(200)
                 .json(staff[0])
             })
+            .catch(next);
     })
 
 inputRouter
@@ -107,7 +108,8 @@ inputRouter
             doc.pipe(res);
             doc.end();
             approvalEmail(req.params.id).catch(console.error);  
-        })        
+        })
+        .catch(next)        
                 
               
     })
