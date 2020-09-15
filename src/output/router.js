@@ -1,16 +1,16 @@
-require('dotenv').config()
-const express = require('express')
-const { v4: uuid } = require('uuid')
-//const logger = require('../logger')
-const { NODE_ENV } = require('../config')
-const OutputService = require('./service')
-const { updateIncident } = require('./service')
-const returnEmail = require('../email')
+require('dotenv').config();
+const express = require('express');
+const { v4: uuid } = require('uuid');
+//const logger = require('../logger');
+const { NODE_ENV } = require('../config');
+const OutputService = require('./service');
+const { updateIncident } = require('./service');
+const returnEmail = require('../email');
 const dataReturn = require('../dataReturn');
-const app = express()
+const app = express();
 
-const outputRouter = express.Router()
-const bodyParser = express.json()
+const outputRouter = express.Router();
+const bodyParser = express.json();
 
 outputRouter
     .route('/conformationpage/:id')
@@ -61,7 +61,7 @@ outputRouter
             .then(data => {dataReturn(data);});
             
         }
-    })
+    });
 
 
 module.exports = outputRouter

@@ -1,14 +1,14 @@
-require('dotenv').config()
-const express = require('express')
-const bodyParser = require('body-parser')
-const morgan = require('morgan')
-const cors = require('cors')
+require('dotenv').config();
+const express = require('express');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const cors = require('cors');
 const {CLIENT_ORIGIN} = require('./config');
-const helmet = require('helmet')
-const { NODE_ENV } = require('./config')
-const IncidentService = require('./input/service')
-const inputRouter = require('./input/router')
-const outputRouter = require('./output/router')
+const helmet = require('helmet');
+const { NODE_ENV } = require('./config');
+const IncidentService = require('./input/service');
+const inputRouter = require('./input/router');
+const outputRouter = require('./output/router');
 
 
 const app = express()
@@ -23,7 +23,7 @@ const morganOption = ( NODE_ENV === 'production')
 app.use(morgan(morganOption))
 app.use(express.json())
 app.use(helmet())
-app.use(cors())
+app.use(cors({origin: CLIENT_ORIGIN}));
 app.use(inputRouter)
 app.use(outputRouter)
 
