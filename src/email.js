@@ -39,13 +39,7 @@ async function approvalEmail(id) {
 			'">Approve  or Return Incident </a>',
 	};
 
-	transporter.sendMail(mailOptions, (error, info) => {
-		if (error) {
-			return console.log(error);
-		}
-		console.log('Message sent: %s', info.messageId);
-		console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-	});
+	transporter.sendMail(mailOptions);
 }
 
 async function returnEmail(id) {
@@ -70,13 +64,7 @@ async function returnEmail(id) {
 			'">Review Incident </a>',
 	};
 
-	transporter.sendMail(mailOptions, (error, info) => {
-		if (error) {
-			return console.log(error);
-		}
-		console.log('Message sent: %s', info.messageId);
-		console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-	});
+	transporter.sendMail(mailOptions);
 }
 
 module.exports = approvalEmail;

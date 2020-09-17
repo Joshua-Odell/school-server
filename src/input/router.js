@@ -60,23 +60,18 @@ inputRouter.route('/staffcheck/:staff_name').get((req, res, next) => {
 		.catch(next);
 });
 
-inputRouter
-	// I need to distinguish between a post to add the final incident and one to add individual holds
-	.route('/hold')
-	// I need a post for a hold that returns the id and name of the hold_used
-	// I dont know how to distinguish which table this is going to
-	.post((req, res, next) => {
-		const knexInstance = req.app.get('db');
-		const { hold_type, start_time, stop_time, duration } = req.body;
-		const newHold = { hold_type, start_time, stop_time, duration };
-		const id = uuid();
+inputRouter.route('/hold').post((req, res, next) => {
+	const knexInstance = req.app.get('db');
+	const { hold_type, start_time, stop_time, duration } = req.body;
+	const newHold = { hold_type, start_time, stop_time, duration };
+	const id = uuid();
 
-		InputService.addHold(knexInstance, newHold)
-			.then((hold) => {
-				res.status(201).json(hold.id);
-			})
-			.catch(next);
-	});
+	InputService.addHold(knexInstance, newHold)
+		.then((hold) => {
+			res.status(201).json(hold.id);
+		})
+		.catch(next);
+});
 
 inputRouter.route('/pdf/:id').get((req, res, next) => {
 	const knexInstance = req.app.get('db');
@@ -93,6 +88,7 @@ inputRouter.route('/pdf/:id').get((req, res, next) => {
 			doc.pipe(res);
 			doc.end();
 			approvalEmail(req.params.id).catch(console.error);
+			res.status(200);
 		})
 		.catch(next);
 });
