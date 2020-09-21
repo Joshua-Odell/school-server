@@ -19,7 +19,9 @@ inputRouter
 	.post((req, res, next) => {
 		const knexInstance = req.app.get('db');
 		const newIncident = { ...req.body };
-
+		if (!newIncident) {
+			return res.status(400);
+		}
 		InputService.addIncident(req.app.get('db'), newIncident)
 			.then((incident) => {
 				res.status(201).json(incident.id);
@@ -32,7 +34,7 @@ inputRouter
 	.get((req, res, next) => {
 		const knexInstance = req.app.get('db');
 		if (!req.params.marss || !req.params.student_last_name) {
-			return res.status(404);
+			return res.status(400);
 		}
 		InputService.getStudentVerification(
 			knexInstance,
@@ -65,7 +67,9 @@ inputRouter.route('/hold').post((req, res, next) => {
 	const { hold_type, start_time, stop_time, duration } = req.body;
 	const newHold = { hold_type, start_time, stop_time, duration };
 	const id = uuid();
-
+	if (!newHold) {
+		return res.status(400);
+	}
 	InputService.addHold(knexInstance, newHold)
 		.then((hold) => {
 			res.status(201).json(hold.id);
@@ -75,6 +79,9 @@ inputRouter.route('/hold').post((req, res, next) => {
 
 inputRouter.route('/pdf/:id').get((req, res, next) => {
 	const knexInstance = req.app.get('db');
+	if (!req.params.id) {
+		res.status(400);
+	}
 	InputService.getById(knexInstance, req.params.id)
 		.then((incident) => {
 			const doc = new pdfDocument();
