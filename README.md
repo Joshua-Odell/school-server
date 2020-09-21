@@ -65,3 +65,231 @@ MarSS Number: 123458
 #### Staff Involved
 
 Name: Luca Brasi
+
+## Endpoints
+
+#### '/'
+
+POST request
+
+##### Data:
+
+Required:
+
+the student's Marss number (integer),
+staff submitter name (string),
+school (string),
+date (date),
+day of the week (string),
+narrative (string),
+administration notified (boolean),
+parent notified (boolean),
+parent engaged (boolean),
+parent notified of rights (boolean),
+was an IEP meeting held (boolean),
+student debriefing conducted (boolean),
+staff debriefing conducted (boolean),
+was seclusion used (boolean),
+was force beyond approved holds necessary and if so what type of force was used (string),
+was a student hurt (boolean),
+was a staff member hurt (boolean),
+was law enforcement involved (boolean),
+which room did the incident take place in (string).
+antecedent (string),
+contributing variables (string),
+was the incident a major disruption and if so what type (string)
+
+Optional:
+
+behavior type (array),
+parent notification date and time(date, time),
+holds 1-5 (FK id),
+list of involved staff (array)
+
+##### Success Response
+
+status: 201
+json: created incident id
+
+##### Failure Response
+
+status: 400
+
+##### Notes
+
+Some fields of the post request are calculated from indirect input fields
+
+#### '/studentcheck/:marss/:student_last_name'
+
+GET request
+
+##### Params
+
+Required:
+
+student Marss (integer),
+student last name (string),
+
+##### Success Response
+
+status: 200
+json: 'Students Presence Confirmed'
+
+##### Failure Response
+
+status: 400
+
+##### Example
+
+'/studentcheck/123457/Lovegood'
+
+##### Notes
+
+This endpoint is not meant to be called independently. It's purpose is to validate an entered student during form submission.
+
+#### '/staffcheck/:staff_name'
+
+GET request
+
+##### Params
+
+Required:
+
+staff name (string)
+
+##### Success Response
+
+status: 200
+json: staff entry
+
+##### Failure Response
+
+status: 404
+json: 'Not a valid Staff member'
+
+##### Example
+
+'/staffcheck/Tom Hagen'
+
+##### Notes
+
+Similarly to student check this endpoint is used to validate submitter information as well as the presence of referenced staff in the involved list
+
+#### '/hold'
+
+POST request
+
+##### Data
+
+Required:
+
+hold type (string),
+start time (time),
+stop time (time),
+duration (string)
+
+##### Success Response
+
+status: 201
+json: hold id
+
+##### Failure Response
+
+status: 400
+
+##### Example
+
+'/hold'
+
+##### Notes
+
+Each hold used gets its own entry in the database that is then referenced in the greater incident table.
+
+#### '/pdf/:id'
+
+GET request
+
+##### Params
+
+Required:
+
+incident id (integer)
+
+##### Success Response
+
+status: 200
+
+##### Failure Response
+
+status: 400
+
+##### Example
+
+'/pdf/5'
+
+##### Notes
+
+This is an internal endpoint that generates a PDF incident report for each incident on completion.
+
+#### '/conformationpage/:id
+
+GET request
+
+##### Params
+
+Required:
+
+incident id (integer)
+
+##### Success Response
+
+status: 200
+json: Select information from the incident that is the least protected
+
+##### Failure Response
+
+status: 404
+json: 'Incident Not Found' or 'This Incident was already approved'
+
+##### Example
+
+'/conformationpage/5'
+
+##### Notes
+
+This endpoint is used so that after submission the designated approver can approve or return the incident before its entry into the final data system. Since the approver has already received the pdf the information returned is only enough to confirm that they are commenting on the correct incident. This is to reduce unnecessary transmission of sensitive information.This link is emailed with the pdf and is not intended for general use.
+
+#### '/conformationpage/:id'
+
+PATCH request
+
+##### Params
+
+Required:
+
+incident id (integer)
+
+##### Data
+
+Required:
+
+approval (boolean),
+comments (string)
+
+##### Success Response
+
+status: 200
+json: 'incident updated'
+
+##### Failure Response
+
+status: 404
+json: 'Invalid Request
+
+##### Example
+
+'/conformationpage/5'
+
+##### Notes
+
+This is used to actually update the incident with the relevant response. This also triggers an email with revision request if submitter returns the incident.
